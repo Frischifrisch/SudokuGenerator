@@ -72,11 +72,11 @@ def main():
              [0, 0, 0, 0, 4, 0, 0, 6, 0]]
 
     sudoku = Sudoku(board)
-    print("Difficulty: " + sudoku.evaluate())
+    print(f"Difficulty: {sudoku.evaluate()}")
 
     # needed for multiple solutions
     counter = 0
-    for solutions in sudoku.solve():
+    for _ in sudoku.solve():
         print()
         sudoku.print()
         counter += 1

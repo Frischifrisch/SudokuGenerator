@@ -13,7 +13,7 @@ class Sudoku:
         # create empty 9x9 board
         rows = 9
         columns = 9
-        self.board = [[0 for j in range(columns)] for i in range(rows)]
+        self.board = [[0 for _ in range(columns)] for _ in range(rows)]
 
 
     def toSVG(self):
@@ -55,7 +55,7 @@ class Sudoku:
                     self.board[r + i][c + i] = square.pop()
 
         # fill rest
-        for solutions in self.solve():
+        for _ in self.solve():
             break
 
         # difficulty
@@ -66,14 +66,14 @@ class Sudoku:
         random.shuffle(unvisited)
 
         # remove numbers
-        while empty_cells > 0 and len(unvisited) > 0:
+        while empty_cells > 0 and unvisited:
             # saving a copy of the number, just in case, if we cant remove it
             r, c = unvisited.pop()
             copy = self.board[r][c]
             self.board[r][c] = 0
 
             # checking how many solutions are in the board
-            solutions = [solution for solution in self.solve()]
+            solutions = list(self.solve())
 
             # if there is more than one solution, we put the number back
             if len(solutions) > 1:
@@ -81,12 +81,10 @@ class Sudoku:
             else:
                 empty_cells -= 1
 
-        # if unvisited is empty, but empty_cells not -> trying again
-        if empty_cells > 0:
-            print("No Sudoku found. Trying again.")
-            return False
-        else:
+        if empty_cells <= 0:
             return True
+        print("No Sudoku found. Trying again.")
+        return False
 
 
 
@@ -141,7 +139,7 @@ class Sudoku:
 def main():
     # takes difficulty as an argument, if not provided the program removes half of the board (level 3)
     args = [int(x) if x.isdecimal() else x for x in sys.argv[1:]]
-    difficulty = args[0] if len(args) > 0 else 3
+    difficulty = args[0] if args else 3
 
     sudoku = Sudoku()
 
